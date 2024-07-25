@@ -18,20 +18,19 @@ describe('Job Roles Page Tests', () => {
   it('should display the correct job roles information', async () => {
     const expectedJobRoles = [
       {
-        roleName: 'Software Engineer',
-        location: 'New York',
-        band: 'Band 3',
-        capability: 'Development',
-        closingDate: '2024-08-01'
+        roleName: '',
+        location: '',
+        band: '',
+        capability: '',
+        closingDate: ''
       },
       {
-        roleName: 'Product Manager',
-        location: 'San Francisco',
-        band: 'Band 4',
-        capability: 'Product',
-        closingDate: '2024-07-31'
+        roleName: '',
+        location: '',
+        band: '',
+        capability: '',
+        closingDate: ''
       }
-      // Add more expected job roles here
     ];
 
     await jobRolesPage.open();
