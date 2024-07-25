@@ -1,0 +1,38 @@
+import { Builder, WebDriver } from 'selenium-webdriver';
+import { expect } from 'chai';
+import { LoginPage } from './LoginPage';
+
+describe('Login Page Tests', () => {
+  let driver: WebDriver;
+  let loginPage: LoginPage;
+
+  before(async () => {
+    driver = new Builder().forBrowser('chrome').build();
+    loginPage = new LoginPage(driver);
+  });
+
+  afterEach(async () => {
+    await driver.manage().deleteAllCookies(); // Ensure a fresh state for each test
+  });
+
+  after(async () => {
+    await loginPage.close();
+  });
+
+  it('should login successfully with valid credentials', async () => {
+    await loginPage.open();
+    await loginPage.setUsername('validUsername');
+    await loginPage.setPassword('validPassword');
+    await loginPage.submitLogin();
+    // Add your assertion here, e.g., checking for a successful login message or redirection
+  });
+
+  it('should display error with invalid credentials', async () => {
+    await loginPage.open();
+    await loginPage.setUsername('invalidUsername');
+    await loginPage.setPassword('invalidPassword');
+    await loginPage.submitLogin();
+    const errorMessage = await loginPage.getErrorMessage();
+    expect(errorMessage).to.include('Invalid credentials');
+  });
+});
