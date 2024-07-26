@@ -18,18 +18,26 @@ describe('Job Roles Page Tests', () => {
   it('should display the correct job roles information', async () => {
     const expectedJobRoles = [
       {
-        roleName: '',
-        location: '',
-        band: '',
-        capability: '',
-        closingDate: ''
+        roleName: 'Software Engineer',
+        location: 'BELFAST',
+        band: 'BAND1',
+        capability: 'Engineering',
+        closingDate: '2024-12-31 23:59:59'
       },
       {
-        roleName: '',
-        location: '',
-        band: '',
-        capability: '',
-        closingDate: ''
+        roleName: 'Data Scientist',
+        location: 'DERRY',
+        band: 'BAND2',
+        capability: 'Data & AI',
+        closingDate: '2024-11-30 23:59:59'
+      }
+      ,
+      {
+        roleName: 'Cyber Security Analyst',
+        location: 'BELFAST',
+        band: 'BAND1',
+        capability: 'Cyber Security',
+        closingDate: '2024-09-30 23:59:59'
       }
     ];
 

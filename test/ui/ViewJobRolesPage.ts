@@ -10,7 +10,7 @@ interface JobRole {
   
   export class JobRolesPage {
     private driver: WebDriver;
-    private url: string = 'https://localhost/3000/job-roles';
+    private url: string = 'https://5chmbvngab.eu-west-1.awsapprunner.com/job-roles';
   
     constructor(driver: WebDriver) {
       this.driver = driver;
