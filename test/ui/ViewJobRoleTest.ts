@@ -1,12 +1,10 @@
-import { Builder, By, WebDriver } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { JobRolesPage } from './ViewJobRolesPage';
-import { url } from 'inspector';
 import { urlContains } from 'selenium-webdriver/lib/until';
+import { By } from 'selenium-webdriver';
 
 describe('Job Roles Page Tests', () => {
-  let driver: WebDriver;
-  let jobRolesPage: JobRolesPage;
+  let jobRolesPage: JobRolesPage
 
   //These are specifically for the tests, so I think these are better suited to remain in the test class, rather than going in the page class
   const validLocations = ['BELFAST', 'DERRY', 'LONDON']; // This can be adatped as reuired
@@ -16,15 +14,14 @@ describe('Job Roles Page Tests', () => {
 
   //before any 
   before(async () => {
-    driver = new Builder().forBrowser('chrome').build();
-    jobRolesPage = new JobRolesPage(driver);
+    jobRolesPage = new JobRolesPage;
   });
 
   after(async () => {
     await jobRolesPage.close();
   });
 
-  it('should display a table with the correct headings', async () => {
+  it.only('should display a table with the correct headings', async () => {
     await jobRolesPage.open();
     await jobRolesPage.waitForTable();
 
@@ -66,12 +63,12 @@ describe('Job Roles Page Tests', () => {
     await jobRolesPage.open();
     await jobRolesPage.clickInstagramButton();
 
-    await driver.wait(urlContains('instagram'), 10000);
+    await jobRolesPage.driver.wait(urlContains('instagram'), 10000);
 
-    const currentUrl = await driver.getCurrentUrl();
+    const currentUrl = await jobRolesPage.driver.getCurrentUrl();
     console.log(currentUrl);
     expect(currentUrl).to.include('instagram');
-    await driver.navigate().back();
+    await jobRolesPage.driver.navigate().back();
 
 });
 
@@ -79,12 +76,12 @@ it('should bring the user to the Facebook page', async () => {
   await jobRolesPage.open();
   await jobRolesPage.clickFacebookButton();
 
-  await driver.wait(urlContains('instagram'), 10000);
+  await jobRolesPage.driver.wait(urlContains('facebook'), 10000);
 
-  const currentUrl = await driver.getCurrentUrl();
+  const currentUrl = await jobRolesPage.driver.getCurrentUrl();
   console.log(currentUrl);
   expect(currentUrl).to.include('instagram');
-  await driver.navigate().back();
+  await jobRolesPage.driver.navigate().back();
 
 });
 

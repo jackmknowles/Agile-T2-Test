@@ -1,4 +1,5 @@
 import { By, WebDriver, until } from "selenium-webdriver";
+import BasePage from "./BasePage";
 
 interface JobRole {
   roleName: string;
@@ -8,13 +9,13 @@ interface JobRole {
   closingDate: string;
 }
 
-export class JobRolesPage {
-  private driver: WebDriver;
+export class JobRolesPage extends BasePage{
+
   //private url: string = 'https://5chmbvngab.eu-west-1.awsapprunner.com/job-roles';
   private url: string = "http://localhost:3000/job-roles";
 
-  constructor(driver: WebDriver) {
-    this.driver = driver;
+  constructor() {
+    super();
   }
 
   async open() {
