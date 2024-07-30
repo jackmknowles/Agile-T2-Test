@@ -1,13 +1,17 @@
 import { Builder, By, WebDriver } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { JobRolesPage } from './ViewJobRolesPage';
+import { url } from 'inspector';
+import { urlContains } from 'selenium-webdriver/lib/until';
 
 describe('Job Roles Page Tests', () => {
   let driver: WebDriver;
   let jobRolesPage: JobRolesPage;
 
+  //These are specifically for the tests, so I think these are better suited to remain in the test class, rather than going in the page class
   const validLocations = ['BELFAST', 'DERRY', 'LONDON']; // This can be adatped as reuired
-  const validRoleNames = ['Software Engineer', 'Data Scientist', 'Cyber Security Analyst']; // This can be adatped as reuired
+  const validRoleNames = ['Software Engineer', 'Data Scientist', 'Cyber Security Analyst']; // This can be adapted as reuired
+
   const dateRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/; //this should remain as is, this is the date regex
 
   //before any 
@@ -22,25 +26,19 @@ describe('Job Roles Page Tests', () => {
 
   it('should display a table with the correct headings', async () => {
     await jobRolesPage.open();
-    // Wait for the table to be present
     await jobRolesPage.waitForTable();
-    // get the header row
+
     const headerRow = await jobRolesPage.findHeaderRow();
-    
-    // Extract the text from each header cell
     const headers = await headerRow.findElements(By.css('th'));
     const headerTexts = await Promise.all(headers.map(header => header.getText()));
-  
-    // Expected headers
-    const expectedHeaders = ['Role Name', 'Location', 'Band', 'Capability', 'Closing Date'];
-  
-    // Check that the actual headers match the expected headers
+    const expectedHeaders = ['Job Role', 'Location', 'Band', 'Capability', 'Closing Date'];
+
     expect(headerTexts).to.deep.equal(expectedHeaders, 'Table headers do not match expected headers');
   });
   
-
   it('should display the correct job roles information', async () => {
     await jobRolesPage.open();
+    await jobRolesPage.waitForTable();
     const actualJobRoles = await jobRolesPage.getJobRoles();
 
     actualJobRoles.forEach((role, index) => {
@@ -52,6 +50,7 @@ describe('Job Roles Page Tests', () => {
 
   it('should have non-empty data fields for each job role', async () => {
     await jobRolesPage.open();
+    await jobRolesPage.waitForTable();
     const actualJobRoles = await jobRolesPage.getJobRoles();
 
     actualJobRoles.forEach((role) => {
@@ -62,6 +61,35 @@ describe('Job Roles Page Tests', () => {
       expect(role.closingDate).to.not.be.empty;
     });
   });
+
+  it('should bring the user to the Instagram page', async () => {
+    await jobRolesPage.open();
+    await jobRolesPage.clickInstagramButton();
+
+    await driver.wait(urlContains('instagram'), 10000);
+
+    const currentUrl = await driver.getCurrentUrl();
+    console.log(currentUrl);
+    expect(currentUrl).to.include('instagram');
+    await driver.navigate().back();
+
+});
+
+it('should bring the user to the Facebook page', async () => {
+  await jobRolesPage.open();
+  await jobRolesPage.clickFacebookButton();
+
+  await driver.wait(urlContains('instagram'), 10000);
+
+  const currentUrl = await driver.getCurrentUrl();
+  console.log(currentUrl);
+  expect(currentUrl).to.include('instagram');
+  await driver.navigate().back();
+
+});
+
+
+
 
   /*
   it('should display the correct job roles information', async () => {
