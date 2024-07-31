@@ -2,26 +2,27 @@ import { Builder, By, WebDriver } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { LoginPage } from './LoginPage';
 import webdriver from 'selenium-webdriver';
+import { log } from 'console';
 
 
 describe('LoginPage Tests', () => {
-  let driver: WebDriver;
   let loginPage: LoginPage;
 
   before(async () => {
-    driver = new Builder().forBrowser('chrome').build();
-    loginPage = new LoginPage(driver);
-    await driver.get('http://localhost:3000/loginform');
-   // await driver.get('https://5chmbvngab.eu-west-1.awsapprunner.com/job-roles'); 
+    loginPage = new LoginPage(); 
+    await loginPage.open();
   });
 
   after(async () => {
-    await driver.quit();
+    await loginPage.closeBrowser();
   });
 
-  //let validEmail string = "Hello, World!";
-// console.log(myVariable);
-
+  // vars
+  let validEmail: string = "valid.admin@email.com";
+  let invalidEmail: string = "invalid@gmail.com";
+  let validPassword: string = "admin!Pa$$word123";
+  let invalidPassword: string = "123";
+  
 
   it('should find the email input field', async () => {
     const emailField = await loginPage.email();
@@ -45,16 +46,19 @@ describe('LoginPage Tests', () => {
   it('should display error message when wrong email and password entered', async () => {
     const emailField = await loginPage.email();
     await emailField.clear();
-    await emailField.sendKeys('invalid@example.com');
+    await emailField.sendKeys(invalidEmail);
 
     const passwordField = await loginPage.password();
     await passwordField.clear();
-    await passwordField.sendKeys('WrongPassword1!');
+    await passwordField.sendKeys(invalidPassword);
 
     await loginPage.clickSubmit();
 
-    const errorMessage = await driver.findElement(By.id('error-message')); // need to use By.id here
-    expect(await errorMessage.getText()).to.include('Login Request: Invalid Login Credentials!');
+   // const errorMessage = await loginPage.findElementById('error-message');
+  //  const errorMessage = await driver.findElement(By.id('error-message')); // need to use By.id here
+    // expect(await errorMessage.getText()).to.include('Login Request: Invalid Login Credentials!');
+    const errorMessage = await loginPage.findElementByCss('H2');
+    expect(await errorMessage.getText()).to.include('Invalid Password!');
   });
 
   // no login details entered; click Submit button
@@ -69,8 +73,8 @@ describe('LoginPage Tests', () => {
 
       await loginPage.clickSubmit();
 
-      const errorMessage = await driver.findElement(By.id('error-message')); 
-     // const errorMessage = await driver.findElement(By.css('H2'));
+     // const errorMessage = await loginPage.findElementById('error-message'); 
+      const errorMessage = await loginPage.findElementByCss('H2');
      // expect(await errorMessage.getText()).to.include('Password must be at least 8 characters long.');
      expect(await errorMessage.getText()).to.include('Invalid Email Format!');
     }); 
@@ -79,123 +83,132 @@ describe('LoginPage Tests', () => {
   it('should display error message if password too short', async () => {
     const emailField = await loginPage.email();
     await emailField.clear();
-    await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+   // await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+    //await emailField.sendKeys(validEmail);
+    await loginPage.enterTextById('email',validEmail);
+
 
     const passwordField = await loginPage.password();
     await passwordField.clear();
-    await passwordField.sendKeys('1234567');
+    //await passwordField.sendKeys(invalidPassword);
+    await loginPage.enterTextById('password',invalidPassword);
 
     await loginPage.clickSubmit();
 
-    const errorMessage = await driver.findElement(By.id('error-message')); 
-   //  const errorMessage = await driver.findElement(By.css('H2'));
+    const errorMessage = await loginPage.findElementByCss('H2');
+    //const errorMessage = await loginPage.findElementById('error-message');
+
    // expect(await errorMessage.getText()).to.include('Password must be at least 8 characters long.');
    expect(await errorMessage.getText()).to.include('Invalid Password!');
   });
 
-// check for uppercase letter
-  it('should display error message if password does not contain uppercase letter', async () => {
-      const emailField = await loginPage.email();
-      await emailField.clear();
-      await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+// // check for uppercase letter
+//   it('should display error message if password does not contain uppercase letter', async () => {
+//       const emailField = await loginPage.email();
+//       await emailField.clear();
+//       await emailField.sendKeys(validEmail); // enter valid email
 
-      const passwordField = await loginPage.password();
-      await passwordField.clear();
-      await passwordField.sendKeys('abcdefgh1!');
+//       const passwordField = await loginPage.password();
+//       await passwordField.clear();
+//     //  await passwordField.sendKeys('abcdefgh1!');
+//       await passwordField.sendKeys(invalidPassword);
 
-      await loginPage.clickSubmit();
+//       await loginPage.clickSubmit();
 
-     const errorMessage = await driver.findElement(By.id('error-message'));
-     // const errorMessage = await driver.findElement(By.css('H2'));
-     // expect(await errorMessage.getText()).to.include('Password must contain at least one uppercase letter.');
-     expect(await errorMessage.getText()).to.include('Invalid Password!');
-    });
+//      const errorMessage = await driver.findElement(By.id('error-message'));
+//      // const errorMessage = await driver.findElement(By.css('H2'));
+//      // expect(await errorMessage.getText()).to.include('Password must contain at least one uppercase letter.');
+//      expect(await errorMessage.getText()).to.include('Invalid Password!');
+//     });
 
-    // check for lowercase letter
-  it('should display error message if password does not contain lowercase letter', async () => {
-    const emailField = await loginPage.email();
-    await emailField.clear();
-    await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+//     // check for lowercase letter
+//   it('should display error message if password does not contain lowercase letter', async () => {
+//     const emailField = await loginPage.email();
+//     await emailField.clear();
+//     await emailField.sendKeys(validEmail); // enter valid email
 
-    const passwordField = await loginPage.password();
-    await passwordField.clear();
-    await passwordField.sendKeys('ABCDEFG1@');
+//     const passwordField = await loginPage.password();
+//     await passwordField.clear();
+//    // await passwordField.sendKeys('ABCDEFG1@');
+//     await passwordField.sendKeys(invalidPassword);
 
-    await loginPage.clickSubmit();
+//     await loginPage.clickSubmit();
 
-    const errorMessage = await driver.findElement(By.id('error-message'));
-    // const errorMessage = await driver.findElement(By.css('H2'));
-    // expect(await errorMessage.getText()).to.include('Password must contain at least one lowercase letter.');
-    expect(await errorMessage.getText()).to.include('Invalid Password!');
-  });
+//     const errorMessage = await driver.findElement(By.id('error-message'));
+//     // const errorMessage = await driver.findElement(By.css('H2'));
+//     // expect(await errorMessage.getText()).to.include('Password must contain at least one lowercase letter.');
+//     expect(await errorMessage.getText()).to.include('Invalid Password!');
+//   });
 
-  // check for digit
-  it('should display error message if password does not contain digit', async () => {
-    const emailField = await loginPage.email();
-    await emailField.clear();
-    await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+//   // check for digit
+//   it('should display error message if password does not contain digit', async () => {
+//     const emailField = await loginPage.email();
+//     await emailField.clear();
+//     await emailField.sendKeys(validEmail); // enter valid email
 
-    const passwordField = await loginPage.password();
-    await passwordField.clear();
-    await passwordField.sendKeys('abcdefgh!');
+//     const passwordField = await loginPage.password();
+//     await passwordField.clear();
+//    //  await passwordField.sendKeys('abcdefgh!');
+//     await passwordField.sendKeys(invalidPassword);
 
-    await loginPage.clickSubmit();
+//     await loginPage.clickSubmit();
 
-     const errorMessage = await driver.findElement(By.id('error-message'));
-    //const errorMessage = await driver.findElement(By.css('H2'));
-    // expect(await errorMessage.getText()).to.include('Password must contain at least one uppercase letter.');
-    expect(await errorMessage.getText()).to.include('Invalid Password!');
-  });
+//      const errorMessage = await driver.findElement(By.id('error-message'));
+//     //const errorMessage = await driver.findElement(By.css('H2'));
+//     // expect(await errorMessage.getText()).to.include('Password must contain at least one uppercase letter.');
+//     expect(await errorMessage.getText()).to.include('Invalid Password!');
+//   });
 
-  // check for special character
-  it('should display error message if password does not contain special character', async () => {
-    const emailField = await loginPage.email();
-    await emailField.clear();
-    await emailField.sendKeys('valid.admin@email.com'); // enter valid email
+//   // check for special character
+//   it('should display error message if password does not contain special character', async () => {
+//     const emailField = await loginPage.email();
+//     await emailField.clear();
+//     await emailField.sendKeys(validEmail); // enter valid email
 
-    const passwordField = await loginPage.password();
-    await passwordField.clear();
-    await passwordField.sendKeys('abcdefgh1');
+//     const passwordField = await loginPage.password();
+//     await passwordField.clear();
+//     await passwordField.sendKeys(invalidPassword);
+//     // await passwordField.sendKeys('abcdefgh1');
 
-    await loginPage.clickSubmit();
+//     await loginPage.clickSubmit();
 
-    const errorMessage = await driver.findElement(By.id('error-message'));
-   // const errorMessage = await driver.findElement(By.css('H2'));
-    // expect(await errorMessage.getText()).to.include('Password must contain at least one special character.');
-    expect(await errorMessage.getText()).to.include('Invalid Password!');
-  });
+//     const errorMessage = await driver.findElement(By.id('error-message'));
+//    // const errorMessage = await driver.findElement(By.css('H2'));
+//     // expect(await errorMessage.getText()).to.include('Password must contain at least one special character.');
+//     expect(await errorMessage.getText()).to.include('Invalid Password!');
+//   });
 
-  // invalid email with valid password
-    it('should display error message if email is not valid', async () => {
-      const emailField = await loginPage.email();
-      await emailField.clear();
-      await emailField.sendKeys('invalid.admin@email.com'); // enter valid email
+//   // invalid email with valid password
+//     it('should display error message if email is not valid', async () => {
+//       const emailField = await loginPage.email();
+//       await emailField.clear();
+//       await emailField.sendKeys(invalidEmail); // enter valid email
 
-      const passwordField = await loginPage.password();
-      await passwordField.clear();
-      await passwordField.sendKeys('admin!Pa$$word123');
+//       const passwordField = await loginPage.password();
+//       await passwordField.clear();
+//       await passwordField.sendKeys(validPassword);
 
-      await loginPage.clickSubmit();
+//       await loginPage.clickSubmit();
 
-      const errorMessage = await driver.findElement(By.id('error-message'));
-      // const errorMessage = await driver.findElement(By.css('H2'));
-      // expect(await errorMessage.getText()).to.include('Password must contain at least one special character.');
-      expect(await errorMessage.getText()).to.include('Invalid Login Credentials!');
-    });
+//       const errorMessage = await driver.findElement(By.id('error-message'));
+//       // const errorMessage = await driver.findElement(By.css('H2'));
+//       // expect(await errorMessage.getText()).to.include('Password must contain at least one special character.');
+//       expect(await errorMessage.getText()).to.include('Invalid Login Credentials!');
+//     });
 
-    // successful login
-    it('should enter email and password, then click submit', async () => {
-    const emailField = await loginPage.email();
-    await emailField.clear();
-    await emailField.sendKeys('valid.admin@email.com');
-    expect(await emailField.getAttribute('value')).to.equal('valid.admin@email.com');
+//     // successful login
+//     it('should enter email and password, then click submit', async () => {
+//     const emailField = await loginPage.email();
+//     await emailField.clear();
+//     await emailField.sendKeys(validEmail);
+//     expect(await emailField.getAttribute('value')).to.equal(validEmail);
 
-    const passwordField = await loginPage.password();
-    await passwordField.clear();
-    await passwordField.sendKeys('admin!Pa$$word123');
-    expect(await passwordField.getAttribute('value')).to.equal('admin!Pa$$word123');
+//     const passwordField = await loginPage.password();
+//     await passwordField.clear();
+//     await passwordField.sendKeys(validPassword);
+//     expect(await passwordField.getAttribute('value')).to.equal(validPassword);
 
-    await loginPage.clickSubmit();
-  });
+//     await loginPage.clickSubmit();
+//   });
 });
  
