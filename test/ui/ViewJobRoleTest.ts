@@ -24,7 +24,7 @@ describe("Job Roles Page Tests", () => {
   //probably need to remove the driver from this and include it in a new base class
   before(async () => {
     jobRolesPage = new JobRolesPage();
-    await jobRolesPage.open;
+    await jobRolesPage.open();
   });
 
   // Closing the driver, this is calling the method from the jobRolesPage class
@@ -33,7 +33,6 @@ describe("Job Roles Page Tests", () => {
   });
 
   it("should display a table with the correct headings", async () => {
-    await jobRolesPage.open();
     await jobRolesPage.waitForTable();
 
     const headerRow = await jobRolesPage.getHeaderRow();
@@ -56,7 +55,6 @@ describe("Job Roles Page Tests", () => {
   });
 
   it("should display the correct job roles information", async () => {
-    await jobRolesPage.open();
     await jobRolesPage.waitForTable();
     const actualJobRoles = await jobRolesPage.getJobRoles();
 
@@ -77,7 +75,6 @@ describe("Job Roles Page Tests", () => {
   });
 
   it("should have non-empty data fields for each job role", async () => {
-    await jobRolesPage.open();
     await jobRolesPage.waitForTable();
     const actualJobRoles = await jobRolesPage.getJobRoles();
 
@@ -91,26 +88,24 @@ describe("Job Roles Page Tests", () => {
   });
 
   it("should bring the user to the Instagram page", async () => {
-    await jobRolesPage.open();
     await jobRolesPage.clickInstagramButton();
 
     await jobRolesPage.driver.wait(urlContains("instagram"), 10000);
 
     const currentUrl = await jobRolesPage.driver.getCurrentUrl();
-    console.log(currentUrl);
+    //console.log(currentUrl);
     expect(currentUrl).to.include("instagram");
     await jobRolesPage.driver.navigate().back();
   });
 
   it("should bring the user to the Facebook page", async () => {
-    await jobRolesPage.open();
     await jobRolesPage.clickFacebookButton();
 
     await jobRolesPage.driver.wait(urlContains("facebook"), 10000);
 
     const currentUrl = await jobRolesPage.driver.getCurrentUrl();
-    console.log(currentUrl);
-    expect(currentUrl).to.include("instagram");
+    //console.log(currentUrl);
+    expect(currentUrl).to.include("facebook");
     await jobRolesPage.driver.navigate().back();
   });
 
