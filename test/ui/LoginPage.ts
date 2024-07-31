@@ -1,6 +1,6 @@
 import { By, WebDriver, WebElement } from 'selenium-webdriver';
 
-export class SelinaLoginPage {
+export class LoginPage {
   private driver: WebDriver;
 
   constructor(driver: WebDriver) {

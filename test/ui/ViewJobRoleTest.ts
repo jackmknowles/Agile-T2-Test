@@ -24,6 +24,7 @@ describe("Job Roles Page Tests", () => {
   //probably need to remove the driver from this and include it in a new base class
   before(async () => {
     jobRolesPage = new JobRolesPage();
+    await jobRolesPage.open;
   });
 
   // Closing the driver, this is calling the method from the jobRolesPage class
@@ -31,7 +32,7 @@ describe("Job Roles Page Tests", () => {
     await jobRolesPage.close();
   });
 
-  it.only("should display a table with the correct headings", async () => {
+  it("should display a table with the correct headings", async () => {
     await jobRolesPage.open();
     await jobRolesPage.waitForTable();
 

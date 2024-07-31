@@ -1,16 +1,16 @@
 import { Builder, By, WebDriver } from 'selenium-webdriver';
 import { expect } from 'chai';
-import { SelinaLoginPage } from './LoginPage';
+import { LoginPage } from './LoginPage';
 import webdriver from 'selenium-webdriver';
 
 
-describe('SelinaLoginPage Tests', () => {
+describe('LoginPage Tests', () => {
   let driver: WebDriver;
-  let loginPage: SelinaLoginPage;
+  let loginPage: LoginPage;
 
   before(async () => {
     driver = new Builder().forBrowser('chrome').build();
-    loginPage = new SelinaLoginPage(driver);
+    loginPage = new LoginPage(driver);
     await driver.get('http://localhost:3000/loginform');
    // await driver.get('https://5chmbvngab.eu-west-1.awsapprunner.com/job-roles'); 
   });
