@@ -8,7 +8,7 @@ export default class BasePage {
         this.driver.manage().setTimeouts({ implicit: 10000 });
     }
 
-    async goToUrl(url: string) {
+    async open(url: string) {
         await this.driver.get(url);
     }
 
@@ -33,6 +33,8 @@ export default class BasePage {
     async waitForElementById(id: string, timeout: number = 10000) {
         await this.driver.wait(until.elementLocated(By.id(id)), timeout);
     }
+
+    //could add in findElementByCss && findElementById here maybe
 
     async closeBrowser() {
         await this.driver.quit();

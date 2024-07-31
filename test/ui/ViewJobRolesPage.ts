@@ -16,17 +16,19 @@ export class JobRolesPage extends BasePage{
 
   constructor() {
     super();
+    this.url;
   }
 
+  //makes a call to the basepage
   async open() {
-    await this.driver.get(this.url);
+    await super.open(this.url);
   }
 
   async waitForTable() {
-    await this.driver.wait(until.elementLocated(By.css("table")), 10000);
+    await super.waitForElementByCss("table", 10000)
   }
 
-  async findHeaderRow() {
+  async getHeaderRow() {
     return this.driver.findElement(By.css("table tr"));
   }
 

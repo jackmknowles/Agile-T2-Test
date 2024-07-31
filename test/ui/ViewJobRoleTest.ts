@@ -36,7 +36,7 @@ describe("Job Roles Page Tests", () => {
     await jobRolesPage.open();
     await jobRolesPage.waitForTable();
 
-    const headerRow = await jobRolesPage.findHeaderRow();
+    const headerRow = await jobRolesPage.getHeaderRow();
     const headers = await headerRow.findElements(By.css("th"));
     const headerTexts = await Promise.all(
       headers.map((header) => header.getText())
