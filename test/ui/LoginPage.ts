@@ -1,30 +1,40 @@
 import { By, WebDriver, WebElement } from 'selenium-webdriver';
+import BasePage from './BasePage';
 
-export class LoginPage {
-  private driver: WebDriver;
 
-  constructor(driver: WebDriver) {
-    this.driver = driver;
+export class LoginPage extends BasePage{
+  
+  private url: string = "http://localhost:3000/loginform";
+
+  
+  constructor() {
+   super();
+   this.url;
+  }
+
+  async open() {
+    await super.open(this.url);
   }
 
   // WebElements ---------------------------------------------------------------
-  async email(): Promise<WebElement> {
-    return await this.driver.findElement(By.id('email'));
+ // async email(): Promise<WebElement> {
+  //  return await this.driver.findElement(By.id('email'));
+ // }
+
+  async email() {
+    return await this.findElementById('email');
   }
 
-  async password(): Promise<WebElement> {
-    return await this.driver.findElement(By.id('password'));
+  async password() {
+    return await this.findElementById('password');
   }
 
-  async submit(): Promise<WebElement> {
-    return await this.driver.findElement(By.id('submit'));
+  async submit() {
+    return await this.findElementById('submit');
   }
-  //-------------------------------------------------------------------------------
 
-  // Click on continue ------------------------------------------------------------
   async clickSubmit() {
-    const submitButton = await this.submit();
-    await submitButton.click();
+    await this.clickById('submit');
   }
 }
  
