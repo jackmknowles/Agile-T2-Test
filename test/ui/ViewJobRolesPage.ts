@@ -25,7 +25,7 @@ export class JobRolesPage extends BasePage{
   }
 
   async waitForTable() {
-    await super.waitForElementByCss("table", 10000)
+    await this.waitForElementByCss("table", 10000)
   }
 
   async getHeaderRow() {
@@ -54,21 +54,19 @@ export class JobRolesPage extends BasePage{
   }
 
   async getInstagramButton() {
-    return await this.driver.findElement(By.id("instagram-button"));
+    return await this.findElementById("instagramlinkbutton");
   }
 
   async clickInstagramButton() {
-    const button = await this.getInstagramButton();
-    await button.click();
+    await this.clickById('instagramlinkbutton');
   }
 
   async getFacebookButton() {
-    return await this.driver.findElement(By.id("facebook-button"));
+    return await this.findElementById("facebooklinkbutton");
   }
 
   async clickFacebookButton() {
-    const button = await this.getFacebookButton();
-    await button.click();
+    await this.clickById('facebooklinkbutton');
   }
 
   async close() {
